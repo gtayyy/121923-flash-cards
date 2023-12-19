@@ -20,9 +20,9 @@ function ReusableFlashcardForm(props){
   );
 }
 
-ReusableForm.proptypes = {
+ReusableForm.propTypes = {
 	formSubmissionHandler: PropTypes.func,
 	buttonText: PropTypes.string
-}
+};
 
 export default ReusableFlashcardForm;
