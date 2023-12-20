@@ -1,13 +1,13 @@
 import React from "react";
-import PropTyples from "prop-types";
+import PropTypes from "prop-types";
 import Card from "./Card";
 
 function CardList(props) {
-  const { card, onCardClick } = props;
+  const { cards, onCardClick } = props;
 
   return (
     <div className="card-list">
-      {CardList.map((card) => (
+      {cards.map((card) => (
         <Card
         key={card.id}
         id={card.id}

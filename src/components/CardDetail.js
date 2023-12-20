@@ -16,7 +16,7 @@ function CardDetail(props) {
   );
 }
 
-CardDetail.PropTypes = {
+CardDetail.propTypes = {
   flashcard: PropTypes.object,
   onClickingDelete: PropTypes.func,
   onClickingEdit: PropTypes.func

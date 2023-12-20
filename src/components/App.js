@@ -1,10 +1,12 @@
 import React from "react";
 import Header from "./Header";
+import CardControl from "./CardControl";
 
 function App(){
   return (
     <React.Fragment>
-      <Header />
+			<Header />
+			<CardControl />
     </React.Fragment>
   );
 }

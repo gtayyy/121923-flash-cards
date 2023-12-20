@@ -3,7 +3,8 @@ import NewCardForm from "./NewCardForm";
 // import FlashcardList ?? 
 import EditCard from "./EditCard";
 import CardDetail from "./CardDetail";
-import db from './../firebase.js'; 
+import CardList from "./CardList.js";
+import { db } from './../firebase.js'; 
 import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 function CardControl() {
@@ -63,12 +64,12 @@ function CardControl() {
 
 	const handleAddingNewCardToList = async (newCardData) => {
 		const collectionRef = collection(db, "cards");
-		await addDoc(collectionRef, newTicketData);
+		await addDoc(collectionRef, newCardData);
 		setFormVisibleOnPage(false);
 	}
 
 	const handleChangingSelectedCard = (id) => {
-		const selection = mainCardList.filter(card = card.id === id)[0];
+		const selection = mainCardList.filter(card => card.id === id)[0];
 		setSelectedCard(selection);
 	}
 
@@ -100,7 +101,7 @@ function CardControl() {
 		currentlyVisibleState =
 			<CardList
 				onCardSelection={handleChangingSelectedCard}
-				cardList={mainCardList} />;
+				cards={mainCardList} />;
 		buttonText = "Add Flashcard"
 	}
 

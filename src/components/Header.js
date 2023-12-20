@@ -5,7 +5,7 @@ function Header(){
 	return (
 		<React.Fragment>
 			<h1>Create Your Own Flashcards!</h1>
-			<img src={headerImage} height="400px" width="600px" alt="image of study notes" />
+			<img src={headerImage} height="400px" width="600px" alt="writing study notes"/>
 			</React.Fragment>
   );
 }
