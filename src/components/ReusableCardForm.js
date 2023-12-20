@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function ReusableFlashcardForm(props){
+function ReusableCardForm(props){
   return (
     <React.Fragment>
 			<h3>Create a New Flashcard.</h3>
@@ -20,9 +20,9 @@ function ReusableFlashcardForm(props){
   );
 }
 
-ReusableForm.propTypes = {
+ReusableCardForm.propTypes = {
 	formSubmissionHandler: PropTypes.func,
 	buttonText: PropTypes.string
 };
 
-export default ReusableFlashcardForm;
+export default ReusableCardForm;
