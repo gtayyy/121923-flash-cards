@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Card from "./Card";
 
 function CardList(props) {
-  const { cards, onCardClick } = props;
+  const { cards, onCardSelection } = props;
 
   return (
     <div className="card-list">
@@ -13,7 +13,7 @@ function CardList(props) {
         id={card.id}
         prompt={card.prompt}
         answer={card.answer}
-        whenCardClicked={onCardClick}
+        whenCardSelected={() => onCardSelection(card.id)}
         />
       ))}
       </div>
