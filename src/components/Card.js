@@ -36,23 +36,23 @@ import PropTypes from "prop-types";
 import "./../CSS/Card.css";
 
 function Card(props) {
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [showAnswer, setShowAnser] = useState(false);
 
   const handleCardClick = () => {
-    setShowAnswer(!showAnswer);
+    setShowAnser(!showAnswer);
   };
 
   return (
-    <div className="card-container"> {/*onClick={() => props.whenCardSelected(props.id)}>*/}
-			<div className="card"> 	{`${showAnswer ? "flipped" : ""}`} {/*onClick={handleCardClick}>*/}
-        <div className="front">
+    <div className="card" onClick={() => props.whenCardSelected(props.id)}>
+      <div className={`card-inner ${showAnswer ? "flipped" : ""}`} onClick={handleCardClick}>
+        <div className="card-front">
           <h3>{props.prompt}</h3>
           </div>
-          <div className="front back">
+          <div className="card=back">
             <h3>{props.answer}</h3>
           </div>
         </div>
-      </div> 
+      </div>
   );
 }
 
