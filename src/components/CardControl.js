@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import NewCardForm from "./NewCardForm";
-// import FlashcardList ?? 
 import EditCard from "./EditCard";
 import CardDetail from "./CardDetail";
-import CardList from "./CardList.js";
+import CardList from "./CardList";
 import { db } from './../firebase.js';
 import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 function CardControl() {
 	const [formVisibleOnPage, setFormVisibleOnPage] = useState(false);
 	const [mainCardList, setMainCardList] = useState([]);
-	const [selectedCard, setSelectedCard] = useState(null);
+	const [selectedCardId, setSelectedCardId] = useState(null);
 	const [editing, setEditing] = useState(false);
-
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
@@ -30,16 +28,16 @@ function CardControl() {
 				setMainCardList(cards);
 			},
 			(error) => {
-				setError(error.message)
+				setError(error.message);
 			}
 		);
 		return () => unSubscribe();
 	}, []);
 
 	const handleClick = () => {
-		if (selectedCard != null) {
+		if (selectedCardId != null) {
 			setFormVisibleOnPage(false);
-			setSelectedCard(null);
+			setSelectedCardId(null);
 			setEditing(false);
 		} else {
 			setFormVisibleOnPage(!formVisibleOnPage);
@@ -48,7 +46,7 @@ function CardControl() {
 
 	const handleDeletingCard = async (id) => {
 		await deleteDoc(doc(db, "cards", id));
-		setSelectedCard(null);
+		setSelectedCardId(null);
 	}
 
 	const handleEditClick = () => {
@@ -59,7 +57,7 @@ function CardControl() {
 		const cardRef = doc(db, "cards", cardToEdit.id);
 		await updateDoc(cardRef, cardToEdit);
 		setEditing(false);
-		setSelectedCard(null);
+		setSelectedCardId(null);
 	}
 
 	const handleAddingNewCardToList = async (newCardData) => {
@@ -69,23 +67,37 @@ function CardControl() {
 	}
 
 	const handleChangingSelectedCard = (id) => {
-		const selection = mainCardList.filter(card => card.id === id)[0];
-		setSelectedCard(selection);
+		setSelectedCardId(id);
 	}
+
+	const handleDrawNextCard = () => {
+		const availableCards = mainCardList.filter((card) => card.id !== selectedCardId);
+
+		if (availableCards.length > 0) {
+			const randomIndex = Math.floor(Math.random() * availableCards.length);
+			setSelectedCardId(availableCards[randomIndex].id);
+		} else {
+			console.log("No available cards to draw");
+		}
+	};
 
 	return (
 		<React.Fragment>
-			{selectedCard ? (
+			{selectedCardId ? (
 				<div>
 					{editing ? (
-						<EditCard card={selectedCard} onEditCard={handleEditingCardInList} />
+						<EditCard
+							card={mainCardList.find((card) => card.id === selectedCardId)}
+							onEditCard={handleEditingCardInList}
+						/>
 					) : (
 						<CardDetail
-							card={selectedCard}
-							onClickingDelete={() => handleDeletingCard(selectedCard.id)}
+							card={mainCardList.find((card) => card.id === selectedCardId)}
+							onClickingDelete={() => handleDeletingCard(selectedCardId)}
 							onClickingEdit={handleEditClick}
 						/>
 					)}
+					<button onClick={handleDrawNextCard}>Draw Next Card</button>
 				</div>
 			) : formVisibleOnPage ? (
 				<NewCardForm onNewCardCreation={handleAddingNewCardToList} />
@@ -93,52 +105,12 @@ function CardControl() {
 				<CardList
 					onCardSelection={handleChangingSelectedCard}
 					cards={mainCardList}
+					selectedCardId={selectedCardId}
 				/>
 			)}
 			{error ? null : <button onClick={handleClick}>Toggle Form</button>}
 		</React.Fragment>
 	);
 }
-
-
-// 	let currentlyVisibleState = null;
-// 	let buttonText = null;
-
-// 	if (error) {
-// 		currentlyVisibleState = 
-// 			<p>There was an error: {error}</p>
-// 	} else if (editing) {
-// 		currentlyVisibleState =
-// 			<EditCard
-// 				card={selectedCard}
-// 				onEditCard={handleEditingCardInList} />;
-// 		buttonText = "Return to Flashcard List";
-// 	} else if (selectedCard != null) {
-// 		currentlyVisibleState =
-// 			<CardDetail
-// 				card={selectedCard}
-// 				onClickingDelete={handleDeletingCard}
-// 				onClickingEdit={handleEditClick} />;
-// 		buttonText = "Return to Flashcard List";
-// 	} else if (formVisibleOnPage) {
-// 		currentlyVisibleState =
-// 			<NewCardForm
-// 				onNewCardCreation={handleAddingNewCardToList} />;
-// 		buttonText = "Return to Flashcard List";
-// 	} else {
-// 		currentlyVisibleState =
-// 			<CardList
-// 				onCardSelection={handleChangingSelectedCard}
-// 				cards={mainCardList} />;
-// 		buttonText = "Add Flashcard"
-// 	}
-
-// 	return (
-// 		<React.Fragment>
-// 			{currentlyVisibleState}
-// 			{error ? null : <button onClick={handleClick}>{buttonText}</button>}
-// 		</React.Fragment>
-// 	);
-// }
 
 export default CardControl;
